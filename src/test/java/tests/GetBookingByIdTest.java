@@ -22,6 +22,10 @@ public class GetBookingByIdTest extends BaseTest {
                     .get("/booking/" + bookingId);
 
             System.out.println(bookingId + " booking id'si alınmıştır.");
+            Assert.assertEquals(response.getStatusCode(), 200);
+            Assert.assertEquals("Umut", getBookingResponse.getBooking().getFirstname());
+            Assert.assertEquals("Ozguven", getBookingResponse.getBooking().getLastname());
+            Assert.assertEquals(260,getBookingResponse.getBooking().getTotalprice());
 
 
 

@@ -1,15 +1,10 @@
 package tests;
 
 import io.restassured.response.Response;
-import models.Booking;
-import models.Bookingdates;
 import models.CreateBookingResponse;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.sql.SQLOutput;
-
-import static io.restassured.RestAssured.given;
 
 
 public class CreateBookingTest extends BaseTest {

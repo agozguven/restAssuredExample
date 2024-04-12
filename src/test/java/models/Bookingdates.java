@@ -15,7 +15,7 @@ public class Bookingdates{
 		this.checkout = checkout;
 	}
 
-	public Bookingdates(){
+	public Bookingdates() {
 
 	}
 

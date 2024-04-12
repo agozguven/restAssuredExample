@@ -5,9 +5,11 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import models.Auth;
+
 import models.Booking;
 import models.Bookingdates;
-import org.json.JSONObject;
+import models.CreateBookingResponse;
 import org.testng.annotations.BeforeClass;
 
 import java.util.Arrays;
@@ -45,4 +47,42 @@ public class BaseTest {
         return response;
 
     }
+
+    public String CreateToken(){
+        Auth authBody = new Auth("password123","admin");
+
+        Response response = given(spec)
+                .contentType("application/json")
+                .body(authBody)
+                .when()
+                .post("/auth");
+
+        return response.jsonPath().getJsonObject("token");
+
+    }
+    public Response UpdateBooking(String checkin,String checkout,String firstname,String lastname,int totalprice,boolean depositpaid,String updatedcheckin,String updatedcheckout,String updatedfirstname,String updaatedlastname,int updatedtotalprice,boolean updateddepositpaid){
+        Bookingdates bookingdates= new Bookingdates(updatedcheckin,updatedcheckout);
+        Booking updatebookingRequest= new Booking(updatedfirstname,bookingdates,updatedtotalprice,updateddepositpaid,updaatedlastname);
+        String token = CreateToken();
+        Response newBooking = CreateBooking(checkin, checkout, firstname, lastname, totalprice, depositpaid);
+        CreateBookingResponse createBookingResponse = newBooking.as(CreateBookingResponse.class);
+        int bookingId = createBookingResponse.getBookingid();
+
+        Response response = given(spec)
+                .contentType("application/json")
+                .header("Cookie", "token=" + token)
+                .body(updatebookingRequest)
+                .when()
+                .put("/booking/" + bookingId);
+
+        response
+                .then()
+                .statusCode(200);
+
+        return response;
+
+    }
+
 }
+
+
